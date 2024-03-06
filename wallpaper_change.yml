@@ -1,0 +1,26 @@
+---
+- name: Change Wallpaper for All Users on Windows 10
+  hosts: windows
+  vars:
+    wallpaper_url: "https://raw.githubusercontent.com/ansible_concircle/main/wallpaper.jpeg"
+    local_wallpaper_path: "C:\\Windows\\Web\\Wallpaper\\Theme1\\custom_wallpaper.jpeg"
+  tasks:
+    - name: Download wallpaper image
+      win_get_url:
+        url: "{{ wallpaper_url }}"
+        dest: "{{ local_wallpaper_path }}"
+        force: yes
+
+    - name: Set the wallpaper for all users via Registry
+      win_regedit:
+        path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+        name: Wallpaper
+        data: "{{ local_wallpaper_path }}"
+        type: string
+
+    - name: Set the wallpaper style to Fill
+      win_regedit:
+        path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+        name: WallpaperStyle
+        data: "10"  # 10 is for Fill. You can change this value for different styles.
+        type: string
