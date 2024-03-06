@@ -4,7 +4,7 @@
   tasks:
     - name: Copy notification script to remote system
       win_copy:
-        src: https://raw.githubusercontent.com/qowefj/ansible_concircle/main/Show-UpdateNotification.ps1
+        src: https://raw.githubusercontent.com/qowefj/ansible_concircle/main/ShowUpdateNotification.ps1
         dest: C:\Scripts\Show-UpdateNotification.ps1
 
     - name: Schedule notification about Windows Update
