@@ -16,6 +16,6 @@
             arguments: '-ExecutionPolicy Bypass -File C:\Scripts\Show-UpdateNotification.ps1'
         triggers:
           - type: once
-            start_boundary: '2024-03-06T14:08:00'  # Set this to 1 hour before updates are scheduled
+            start_boundary: '2024-03-06T14:10:00'  # Set this to 1 hour before updates are scheduled
         state: present
         enabled: yes
