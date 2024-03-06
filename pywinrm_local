@@ -1,0 +1,8 @@
+- name: Install pywinrm
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Install pywinrm
+      ansible.builtin.pip:
+        name: pywinrm
+        state: present
