@@ -2,7 +2,7 @@
 - name: Change Wallpaper for All Users on Windows 10
   hosts: all
   vars:
-    wallpaper_url: "https://raw.githubusercontent.com/ansible_concircle/main/wallpaper.jpeg"
+    wallpaper_url: "https://raw.githubusercontent.com/qowefj/ansible_concircle/main/wallpaper.jpeg"
     local_wallpaper_path: "C:\\Windows\\Web\\Wallpaper\\Theme1\\custom_wallpaper.jpeg"
   tasks:
     - name: Download wallpaper image
