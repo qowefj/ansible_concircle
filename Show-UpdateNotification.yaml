@@ -1,0 +1,21 @@
+---
+- name: Notify Users About Windows Updates
+  hosts: all
+  tasks:
+    - name: Copy notification script to remote system
+      win_copy:
+        src: https://raw.githubusercontent.com/qowefj/ansible_concircle/main/Show-UpdateNotification.ps1
+        dest: C:\Scripts\Show-UpdateNotification.ps1
+
+    - name: Schedule notification about Windows Update
+      win_scheduled_task:
+        name: NotifyWindowsUpdates
+        description: Notify users about upcoming Windows updates
+        actions:
+          - path: powershell.exe
+            arguments: '-ExecutionPolicy Bypass -File C:\Scripts\Show-UpdateNotification.ps1'
+        triggers:
+          - type: once
+            start_boundary: '2024-03-06T14:08:00'  # Set this to 1 hour before updates are scheduled
+        state: present
+        enabled: yes
