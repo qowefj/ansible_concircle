@@ -3,16 +3,6 @@
   hosts: all
   gather_facts: no
   tasks:
-    - name: Initialize host counter
-      set_fact:
-        host_counter: 0
-
-    - name: Increment host counter
-      set_fact:
-        host_counter: "{{ host_counter | int + 1 }}"
-      delegate_to: localhost
-      run_once: true
-
     - name: Get hostname using PowerShell
       ansible.windows.win_shell: |
         [System.Net.Dns]::GetHostName()
@@ -20,7 +10,7 @@
 
     - name: Set formatted hostname
       set_fact:
-        formatted_hostname: "{{ host_counter }}:{{ ansible_host }}:{{ hostname_result.stdout | trim }}"
+        formatted_hostname: "{{ ansible_host }}:{{ hostname_result.stdout | trim }}"
 
     - name: Display formatted hostname
       debug:
