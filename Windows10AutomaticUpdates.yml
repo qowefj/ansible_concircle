@@ -7,19 +7,30 @@
         name: wuauserv
         start_mode: auto
 
-    - name: Configure Automatic Updates to install every Thursday at 1 PM
+    - name: Remove existing ScheduledInstallDay if present
+      win_regedit:
+        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        name: ScheduledInstallDay
+        state: absent
+
+    - name: Configure ScheduledInstallDay to Thursday
       win_regedit:
         path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
         name: ScheduledInstallDay
         value: 5
         type: dword
-      register: scheduled_install_day
 
     - name: Verify ScheduledInstallDay was set
       win_reg_stat:
         path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
         name: ScheduledInstallDay
       register: verify_scheduled_install_day
+
+    - name: Remove existing ScheduledInstallTime if present
+      win_regedit:
+        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        name: ScheduledInstallTime
+        state: absent
 
     - name: Set scheduled install time to 1 PM
       win_regedit:
@@ -34,6 +45,12 @@
         name: ScheduledInstallTime
       register: verify_scheduled_install_time
 
+    - name: Remove existing AlwaysAutoRebootAtScheduledTime if present
+      win_regedit:
+        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        name: AlwaysAutoRebootAtScheduledTime
+        state: absent
+
     - name: Ensure automatic restart is enabled after updates
       win_regedit:
         path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
@@ -46,6 +63,12 @@
         path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
         name: AlwaysAutoRebootAtScheduledTime
       register: verify_auto_reboot
+
+    - name: Remove existing RebootWarningTimeout if present
+      win_regedit:
+        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        name: RebootWarningTimeout
+        state: absent
 
     - name: Set auto reboot warning to 15 minutes
       win_regedit:
@@ -63,7 +86,7 @@
     - name: Display verification results
       debug:
         msg:
-          - "ScheduledInstallDay: {{ verify_scheduled_install_day.value }}"
-          - "ScheduledInstallTime: {{ verify_scheduled_install_time.value }}"
-          - "AlwaysAutoRebootAtScheduledTime: {{ verify_auto_reboot.value }}"
-          - "RebootWarningTimeout: {{ verify_reboot_warning_timeout.value }}"
+          - "ScheduledInstallDay: {{ verify_scheduled_install_day }}"
+          - "ScheduledInstallTime: {{ verify_scheduled_install_time }}"
+          - "AlwaysAutoRebootAtScheduledTime: {{ verify_auto_reboot }}"
+          - "RebootWarningTimeout: {{ verify_reboot_warning_timeout }}"
