@@ -1,0 +1,12 @@
+---
+- name: Collect Hostnames
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Get hostname
+      ansible.builtin.command: hostname
+      register: hostname_result
+
+    - name: Display hostname
+      debug:
+        msg: "Hostname: {{ hostname_result.stdout }}"
