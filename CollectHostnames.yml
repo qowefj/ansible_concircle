@@ -3,8 +3,9 @@
   hosts: all
   gather_facts: no
   tasks:
-    - name: Get hostname
-      ansible.builtin.command: hostname
+    - name: Get hostname using PowerShell
+      ansible.windows.win_shell: |
+        [System.Net.Dns]::GetHostName()
       register: hostname_result
 
     - name: Display hostname
