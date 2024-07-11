@@ -1,6 +1,6 @@
 ---
 - name: Force Install Latest macOS Updates
-  hosts: macos
+  hosts: all
   become: yes
   tasks:
     - name: Check for available updates
