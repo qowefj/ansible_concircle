@@ -3,29 +3,29 @@
   hosts: windows
   tasks:
     - name: Stop Windows Update service
-      win_service:
+      ansible.windows.win_service:
         name: wuauserv
         start_mode: disabled
         state: stopped
 
     - name: Disable Windows Update using Registry
-      win_regedit:
+      ansible.windows.win_regedit:
         path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
         name: NoAutoUpdate
         value: 1
         type: dword
 
-    - name: Verify Windows Update service is stopped and disabled
-      win_service_info:
-        name: wuauserv
+    - name: Check if Windows Update service is stopped
+      ansible.windows.win_shell: |
+        Get-Service -Name wuauserv | Select-Object -Property Name, Status, StartType
       register: win_update_service_status
 
     - name: Display Windows Update service status
       debug:
-        msg: "Windows Update service status: {{ win_update_service_status }}"
-        
+        msg: "Windows Update service status: {{ win_update_service_status.stdout }}"
+
     - name: Verify NoAutoUpdate registry key
-      win_reg_stat:
+      ansible.windows.win_reg_stat:
         path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
         name: NoAutoUpdate
       register: verify_no_auto_update
