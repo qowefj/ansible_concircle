@@ -8,6 +8,10 @@
         [System.Net.Dns]::GetHostName()
       register: hostname_result
 
-    - name: Display hostname
+    - name: Set formatted hostname
+      set_fact:
+        formatted_hostname: "{{ ansible_host }}:{{ hostname_result.stdout | trim }}"
+
+    - name: Display formatted hostname
       debug:
-        msg: "Hostname: {{ hostname_result.stdout }}"
+        msg: "{{ formatted_hostname }}"
