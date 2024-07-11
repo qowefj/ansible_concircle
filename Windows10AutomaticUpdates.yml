@@ -64,7 +64,7 @@
     - name: Display verification results
       debug:
         msg:
-          - "ScheduledInstallDay: {{ scheduled_install_day_check.value }}"
-          - "ScheduledInstallTime: {{ scheduled_install_time_check.value }}"
-          - "AlwaysAutoRebootAtScheduledTime: {{ auto_reboot_check.value }}"
-          - "RebootWarningTimeout: {{ reboot_warning_timeout_check.value }}"
+          - "ScheduledInstallDay: {{ scheduled_install_day_check.value.ScheduledInstallDay }}"
+          - "ScheduledInstallTime: {{ scheduled_install_time_check.value.ScheduledInstallTime }}"
+          - "AlwaysAutoRebootAtScheduledTime: {{ auto_reboot_check.value.AlwaysAutoRebootAtScheduledTime }}"
+          - "RebootWarningTimeout: {{ reboot_warning_timeout_check.value.RebootWarningTimeout }}"
