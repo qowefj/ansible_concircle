@@ -61,10 +61,18 @@
         name: RebootWarningTimeout
       register: reboot_warning_timeout_check
 
-    - name: Display verification results
+    - name: Display ScheduledInstallDay structure
       debug:
-        msg:
-          - "ScheduledInstallDay: {{ scheduled_install_day_check.value.ScheduledInstallDay }}"
-          - "ScheduledInstallTime: {{ scheduled_install_time_check.value.ScheduledInstallTime }}"
-          - "AlwaysAutoRebootAtScheduledTime: {{ auto_reboot_check.value.AlwaysAutoRebootAtScheduledTime }}"
-          - "RebootWarningTimeout: {{ reboot_warning_timeout_check.value.RebootWarningTimeout }}"
+        var: scheduled_install_day_check
+
+    - name: Display ScheduledInstallTime structure
+      debug:
+        var: scheduled_install_time_check
+
+    - name: Display AlwaysAutoRebootAtScheduledTime structure
+      debug:
+        var: auto_reboot_check
+
+    - name: Display RebootWarningTimeout structure
+      debug:
+        var: reboot_warning_timeout_check
