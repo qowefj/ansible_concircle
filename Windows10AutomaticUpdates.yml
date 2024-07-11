@@ -13,6 +13,7 @@
         name: ScheduledInstallDay
         value: 5
         type: dword
+      register: scheduled_install_day
 
     - name: Verify ScheduledInstallDay was set
       win_reg_stat:
@@ -62,7 +63,7 @@
     - name: Display verification results
       debug:
         msg:
-          - "ScheduledInstallDay: {{ verify_scheduled_install_day }}"
-          - "ScheduledInstallTime: {{ verify_scheduled_install_time }}"
-          - "AlwaysAutoRebootAtScheduledTime: {{ verify_auto_reboot }}"
-          - "RebootWarningTimeout: {{ verify_reboot_warning_timeout }}"
+          - "ScheduledInstallDay: {{ verify_scheduled_install_day.value }}"
+          - "ScheduledInstallTime: {{ verify_scheduled_install_time.value }}"
+          - "AlwaysAutoRebootAtScheduledTime: {{ verify_auto_reboot.value }}"
+          - "RebootWarningTimeout: {{ verify_reboot_warning_timeout.value }}"
