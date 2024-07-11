@@ -1,0 +1,6 @@
+---
+- name: Check Connectivity with Mac Hosts
+  hosts: all
+  tasks:
+    - name: Ping Mac Hosts
+      ansible.builtin.ping:
