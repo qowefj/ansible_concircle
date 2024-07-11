@@ -7,18 +7,62 @@
         name: wuauserv
         start_mode: auto
 
-    - name: Configure Automatic Updates to install every Saturday at 3 PM
+    - name: Configure Automatic Updates to install every Thursday at 1 PM
       win_regedit:
         path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
         name: ScheduledInstallDay
-        value: 6
+        value: 5
         type: dword
       register: scheduled_install_day
 
-    - name: Set scheduled install time to 3 PM
+    - name: Set scheduled install time to 1 PM
       win_regedit:
         path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
         name: ScheduledInstallTime
-        value: 15
+        value: 13
         type: dword
       when: scheduled_install_day is success
+
+    - name: Ensure automatic restart is enabled after updates
+      win_regedit:
+        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        name: AlwaysAutoRebootAtScheduledTime
+        value: 1
+        type: dword
+
+    - name: Set auto reboot warning to 15 minutes
+      win_regedit:
+        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        name: RebootWarningTimeout
+        value: 15
+        type: dword
+
+    - name: Verify ScheduledInstallDay
+      win_reg_stat:
+        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        name: ScheduledInstallDay
+      register: scheduled_install_day_check
+
+    - name: Verify ScheduledInstallTime
+      win_reg_stat:
+        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        name: ScheduledInstallTime
+      register: scheduled_install_time_check
+
+    - name: Verify AlwaysAutoRebootAtScheduledTime
+      win_reg_stat:
+        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        name: AlwaysAutoRebootAtScheduledTime
+      register: auto_reboot_check
+
+    - name: Verify RebootWarningTimeout
+      win_reg_stat:
+        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        name: RebootWarningTimeout
+      register: reboot_warning_timeout_check
+
+    - name: Display verification results
+      debug:
+        msg:
+          - "ScheduledInstallDay: {{ scheduled_install_day_check.value }}"
+          - "ScheduledInstallTime: {{ scheduled_install_time
