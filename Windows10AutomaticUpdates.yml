@@ -13,7 +13,12 @@
         name: ScheduledInstallDay
         value: 5
         type: dword
-      register: scheduled_install_day
+
+    - name: Verify ScheduledInstallDay was set
+      win_reg_stat:
+        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        name: ScheduledInstallDay
+      register: verify_scheduled_install_day
 
     - name: Set scheduled install time to 1 PM
       win_regedit:
@@ -21,7 +26,12 @@
         name: ScheduledInstallTime
         value: 13
         type: dword
-      when: scheduled_install_day is success
+
+    - name: Verify ScheduledInstallTime was set
+      win_reg_stat:
+        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        name: ScheduledInstallTime
+      register: verify_scheduled_install_time
 
     - name: Ensure automatic restart is enabled after updates
       win_regedit:
@@ -30,6 +40,12 @@
         value: 1
         type: dword
 
+    - name: Verify AlwaysAutoRebootAtScheduledTime was set
+      win_reg_stat:
+        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        name: AlwaysAutoRebootAtScheduledTime
+      register: verify_auto_reboot
+
     - name: Set auto reboot warning to 15 minutes
       win_regedit:
         path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
@@ -37,42 +53,16 @@
         value: 15
         type: dword
 
-    - name: Verify ScheduledInstallDay
-      win_reg_stat:
-        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
-        name: ScheduledInstallDay
-      register: scheduled_install_day_check
-
-    - name: Verify ScheduledInstallTime
-      win_reg_stat:
-        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
-        name: ScheduledInstallTime
-      register: scheduled_install_time_check
-
-    - name: Verify AlwaysAutoRebootAtScheduledTime
-      win_reg_stat:
-        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
-        name: AlwaysAutoRebootAtScheduledTime
-      register: auto_reboot_check
-
-    - name: Verify RebootWarningTimeout
+    - name: Verify RebootWarningTimeout was set
       win_reg_stat:
         path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
         name: RebootWarningTimeout
-      register: reboot_warning_timeout_check
+      register: verify_reboot_warning_timeout
 
-    - name: Display ScheduledInstallDay structure
+    - name: Display verification results
       debug:
-        var: scheduled_install_day_check
-
-    - name: Display ScheduledInstallTime structure
-      debug:
-        var: scheduled_install_time_check
-
-    - name: Display AlwaysAutoRebootAtScheduledTime structure
-      debug:
-        var: auto_reboot_check
-
-    - name: Display RebootWarningTimeout structure
-      debug:
-        var: reboot_warning_timeout_check
+        msg:
+          - "ScheduledInstallDay: {{ verify_scheduled_install_day }}"
+          - "ScheduledInstallTime: {{ verify_scheduled_install_time }}"
+          - "AlwaysAutoRebootAtScheduledTime: {{ verify_auto_reboot }}"
+          - "RebootWarningTimeout: {{ verify_reboot_warning_timeout }}"
