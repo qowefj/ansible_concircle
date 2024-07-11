@@ -1,0 +1,39 @@
+---
+- name: Force Install Latest macOS Updates
+  hosts: macos
+  become: yes
+  tasks:
+    - name: Check for available updates
+      ansible.builtin.command:
+        cmd: softwareupdate -l
+      register: update_check
+      ignore_errors: yes
+
+    - name: Display available updates
+      ansible.builtin.debug:
+        msg: "{{ update_check.stdout }}"
+
+    - name: Install all available updates
+      ansible.builtin.command:
+        cmd: softwareupdate -i -a
+      register: update_install
+      ignore_errors: yes
+
+    - name: Display update installation result
+      ansible.builtin.debug:
+        msg: "{{ update_install.stdout }}"
+
+    - name: Reboot the system if required
+      ansible.builtin.command:
+        cmd: |
+          if softwareupdate -l | grep -q "restart"; then
+            shutdown -r now
+          fi
+      when: update_install.changed
+      register: reboot_command
+      ignore_errors: yes
+
+    - name: Display reboot status
+      ansible.builtin.debug:
+        msg: "Reboot command executed: {{ reboot_command.stdout }}"
+      when: update_install.changed
