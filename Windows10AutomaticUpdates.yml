@@ -7,18 +7,18 @@
         name: wuauserv
         start_mode: auto
 
-    - name: Configure Automatic Updates to install every Thursday at 1 PM
+    - name: Configure Automatic Updates to install every Saturday at 3 PM
       win_regedit:
         path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
         name: ScheduledInstallDay
-        value: 5
+        value: 6
         type: dword
       register: scheduled_install_day
 
-    - name: Set scheduled install time to 1 PM
+    - name: Set scheduled install time to 3 PM
       win_regedit:
         path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
         name: ScheduledInstallTime
-        value: 13
+        value: 15
         type: dword
       when: scheduled_install_day is success
