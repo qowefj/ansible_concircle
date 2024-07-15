@@ -43,7 +43,7 @@
       tags:
         - move
 
-    - name: Start Nudge.app
-      command: "open /Applications/Utilities/Nudge.app"
+    - name: Start Nudge.app using osascript
+      command: "osascript -e 'tell application \"Nudge\" to activate'"
       tags:
         - start
