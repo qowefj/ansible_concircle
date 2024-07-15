@@ -5,14 +5,14 @@
   tasks:
     - name: Download Nudge_Latest.sh
       get_url:
-        url: "http://example.com/Nudge_Latest.sh"
+        url: "https://github.com/qowefj/ansible_concircle/blob/main/Nudge_Latest.sh"
         dest: "/tmp/Nudge_Latest.sh"
       tags:
         - download
 
     - name: Download com.github.macadmins.Nudge.json
       get_url:
-        url: "http://example.com/com.github.macadmins.Nudge.json"
+        url: "https://github.com/qowefj/ansible_concircle/blob/main/com.github.macadmins.Nudge.json"
         dest: "/tmp/com.github.macadmins.Nudge.json"
       tags:
         - download
