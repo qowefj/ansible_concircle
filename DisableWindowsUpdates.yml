@@ -11,7 +11,7 @@
     - name: Disable Windows Update using Registry
       ansible.windows.win_regedit:
         path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
-        name: NoAutoUpdate
+        name: "{NoAutoUpdate}"
         value: 1
         type: dword
 
@@ -27,7 +27,7 @@
     - name: Verify NoAutoUpdate registry key
       ansible.windows.win_reg_stat:
         path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
-        name: NoAutoUpdate
+        name: "{NoAutoUpdate}"
       register: verify_no_auto_update
 
     - name: Display NoAutoUpdate registry key status
