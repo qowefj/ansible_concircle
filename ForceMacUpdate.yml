@@ -43,7 +43,9 @@
       tags:
         - move
 
-    - name: Start Nudge.app using osascript
-      command: "osascript -e 'tell application \"Nudge\" to activate'"
+    - name: Start Nudge.app with elevated permissions
+      become: yes
+      become_user: root
+      command: "open /Applications/Utilities/Nudge.app"
       tags:
         - start
