@@ -17,9 +17,23 @@
       tags:
         - download
 
+    - name: Download Nudgehelper.sh
+      get_url:
+        url: "https://raw.githubusercontent.com/qowefj/ansible_concircle/main/Nudgehelper.sh"
+        dest: "/tmp/Nudgehelper.sh"
+      tags:
+        - download
+
     - name: Make Nudge_Latest.sh executable
       file:
         path: "/tmp/Nudge_Latest.sh"
+        mode: "0755"
+      tags:
+        - permissions
+
+    - name: Make Nudgehelper.sh executable
+      file:
+        path: "/tmp/Nudgehelper.sh"
         mode: "0755"
       tags:
         - permissions
@@ -43,9 +57,7 @@
       tags:
         - move
 
-    - name: Start Nudge.app with elevated permissions
-      become: yes
-      become_user: root
-      command: "open /Applications/Utilities/Nudge.app"
+    - name: Execute Nudgehelper.sh with bash
+      command: "bash /tmp/Nudgehelper.sh"
       tags:
-        - start
+        - execute
