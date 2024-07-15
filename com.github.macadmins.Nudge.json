@@ -1,0 +1,13 @@
+{
+  "userInterface": {
+    "simpleMode": true
+  },
+  "osVersionRequirements": [
+    {
+      "aboutUpdateURL": "https://support.apple.com/en-us/HT211896",
+      "requiredInstallationDate": "2024-07-15T00:00:00Z",
+      "requiredMinimumOSVersion": "14.5",
+      "targetedOSVersionsRule": "14"
+    }
+  ]
+}
