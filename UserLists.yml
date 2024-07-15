@@ -1,0 +1,21 @@
+---
+- name: Gather information about local users on Windows 10 machines
+  hosts: all
+  tasks:
+    - name: Get list of local users
+      win_shell: |
+        Get-WmiObject -Class Win32_UserAccount | Select-Object Name, Disabled, LocalAccount, Lockout, PasswordChangeable, PasswordExpires, PasswordRequired | ConvertTo-Json
+      register: local_users
+
+    - name: Display local users
+      debug:
+        msg: "{{ local_users.stdout }}"
+
+    - name: Get last login time for each user
+      win_shell: |
+        Get-WmiObject Win32_NetworkLoginProfile | Select-Object Name, LastLogon | ConvertTo-Json
+      register: last_logins
+
+    - name: Display last login times
+      debug:
+        msg: "{{ last_logins.stdout }}"
