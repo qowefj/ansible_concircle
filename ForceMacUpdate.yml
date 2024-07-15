@@ -5,14 +5,14 @@
   tasks:
     - name: Download Nudge_Latest.sh
       get_url:
-        url: "https://github.com/qowefj/ansible_concircle/blob/main/Nudge_Latest.sh"
+        url: "http://example.com/Nudge_Latest.sh"
         dest: "/tmp/Nudge_Latest.sh"
       tags:
         - download
 
     - name: Download com.github.macadmins.Nudge.json
       get_url:
-        url: "https://github.com/qowefj/ansible_concircle/blob/main/com.github.macadmins.Nudge.json"
+        url: "http://example.com/com.github.macadmins.Nudge.json"
         dest: "/tmp/com.github.macadmins.Nudge.json"
       tags:
         - download
@@ -24,8 +24,17 @@
       tags:
         - permissions
 
-    - name: Execute Nudge_Latest.sh
-      command: "/tmp/Nudge_Latest.sh"
+    - name: Display contents of Nudge_Latest.sh
+      command: "cat /tmp/Nudge_Latest.sh"
+      register: script_content
+      tags:
+        - debug
+
+    - debug:
+        var: script_content.stdout
+
+    - name: Execute Nudge_Latest.sh with bash
+      command: "bash /tmp/Nudge_Latest.sh"
       tags:
         - execute
 
