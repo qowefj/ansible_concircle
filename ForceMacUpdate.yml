@@ -1,39 +1,40 @@
 ---
-- name: Force Install Latest macOS Updates
+- name: Setup Nudge on Mac
   hosts: all
   become: yes
   tasks:
-    - name: Check for available updates
-      ansible.builtin.command:
-        cmd: softwareupdate -l
-      register: update_check
-      ignore_errors: yes
+    - name: Download Nudge_Latest.sh
+      get_url:
+        url: "https://github.com/qowefj/ansible_concircle/blob/main/Nudge_Latest.sh"
+        dest: "/tmp/Nudge_Latest.sh"
+      tags:
+        - download
 
-    - name: Display available updates
-      ansible.builtin.debug:
-        msg: "{{ update_check.stdout }}"
+    - name: Download com.github.macadmins.Nudge.json
+      get_url:
+        url: "https://github.com/qowefj/ansible_concircle/blob/main/com.github.macadmins.Nudge.json"
+        dest: "/tmp/com.github.macadmins.Nudge.json"
+      tags:
+        - download
 
-    - name: Install all available updates
-      ansible.builtin.command:
-        cmd: softwareupdate -i -a
-      register: update_install
-      ignore_errors: yes
+    - name: Make Nudge_Latest.sh executable
+      file:
+        path: "/tmp/Nudge_Latest.sh"
+        mode: "0755"
+      tags:
+        - permissions
 
-    - name: Display update installation result
-      ansible.builtin.debug:
-        msg: "{{ update_install.stdout }}"
+    - name: Execute Nudge_Latest.sh
+      command: "/tmp/Nudge_Latest.sh"
+      tags:
+        - execute
 
-    - name: Reboot the system if required
-      ansible.builtin.command:
-        cmd: |
-          if softwareupdate -l | grep -q "restart"; then
-            shutdown -r now
-          fi
-      when: update_install.changed
-      register: reboot_command
-      ignore_errors: yes
+    - name: Move com.github.macadmins.Nudge.json to /Library/Preferences
+      command: "mv /tmp/com.github.macadmins.Nudge.json /Library/Preferences/com.github.macadmins.Nudge.json"
+      tags:
+        - move
 
-    - name: Display reboot status
-      ansible.builtin.debug:
-        msg: "Reboot command executed: {{ reboot_command.stdout }}"
-      when: update_install.changed
+    - name: Start Nudge.app
+      command: "open /Applications/Utilities/Nudge.app"
+      tags:
+        - start
