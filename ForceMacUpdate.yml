@@ -3,59 +3,12 @@
   hosts: all
   become: yes
   tasks:
-    - name: Download Nudge_Latest.sh
-      get_url:
-        url: "https://raw.githubusercontent.com/qowefj/ansible_concircle/main/Nudge_Latest.sh"
-        dest: "/tmp/Nudge_Latest.sh"
-      tags:
-        - download
-
-    - name: Download com.github.macadmins.Nudge.json
-      get_url:
-        url: "https://raw.githubusercontent.com/qowefj/ansible_concircle/main/com.github.macadmins.Nudge.json"
-        dest: "/tmp/com.github.macadmins.Nudge.json"
-      tags:
-        - download
-
-    - name: Download Nudgehelper.sh
-      get_url:
-        url: "https://raw.githubusercontent.com/qowefj/ansible_concircle/main/Nudgehelper.sh"
-        dest: "/tmp/Nudgehelper.sh"
-      tags:
-        - download
-
-    - name: Make Nudge_Latest.sh executable
-      file:
-        path: "/tmp/Nudge_Latest.sh"
-        mode: "0755"
-      tags:
-        - permissions
-
-    - name: Make Nudgehelper.sh executable
-      file:
-        path: "/tmp/Nudgehelper.sh"
-        mode: "0755"
-      tags:
-        - permissions
-
-    - name: Display contents of Nudge_Latest.sh
-      command: "cat /tmp/Nudge_Latest.sh"
-      register: script_content
-      tags:
-        - debug
-
-    - debug:
-        var: script_content.stdout
 
     - name: Execute Nudge_Latest.sh with bash
       command: "bash /tmp/Nudge_Latest.sh"
       tags:
         - execute
 
-    - name: Move com.github.macadmins.Nudge.json to /Library/Preferences
-      command: "mv /tmp/com.github.macadmins.Nudge.json /Library/Preferences/com.github.macadmins.Nudge.json"
-      tags:
-        - move
 
     - name: Execute Nudgehelper.sh with bash
       command: "bash /tmp/Nudgehelper.sh"
