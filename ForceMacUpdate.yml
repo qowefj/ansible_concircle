@@ -4,13 +4,15 @@
   become: yes
   tasks:
 
+    - name: Execute Nudgehelper.sh with bash
+      command: "bash /tmp/Nudgehelper.sh"
+      tags:
+        - execute
+
     - name: Execute Nudge_Latest.sh with bash
       command: "bash /tmp/Nudge_Latest.sh"
       tags:
         - execute
 
 
-    - name: Execute Nudgehelper.sh with bash
-      command: "bash /tmp/Nudgehelper.sh"
-      tags:
-        - execute
+
