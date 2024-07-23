@@ -2,6 +2,9 @@
 - name: Deploy Nudge and configure for macOS updates
   hosts: all
   become: yes
+  become_method: sudo
+  vars:
+    ansible_become_password: "{{ lookup('env', 'SUDO_PASSWORD') }}"
 
   tasks:
     - name: Install required collection
