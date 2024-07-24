@@ -18,50 +18,12 @@
         mode: '0644'
       become: no
 
-    - name: Ensure /Library/Preferences directory exists
-      file:
-        path: /Library/Preferences
-        state: directory
-        owner: root
-        group: wheel
-        mode: '0755'
-
-    - name: Move the Nudge JSON configuration file to the correct location
-      shell: sudo mv /tmp/nudge/com.github.macadmins.Nudge.json /Library/Preferences/com.github.macadmins.Nudge.json
-      become: yes
-
-    - name: Set ownership and permissions for the JSON configuration file
-      file:
-        path: /Library/Preferences/com.github.macadmins.Nudge.json
-        owner: root
-        group: wheel
-        mode: '0644'
-
     - name: Download the Nudge LaunchAgent plist file to temporary directory
       get_url:
         url: https://raw.githubusercontent.com/qowefj/ansible_concircle/main/nudge/com.github.macadmins.Nudge.plist
         dest: /tmp/nudge/com.github.macadmins.Nudge.plist
         mode: '0644'
       become: no
-
-    - name: Ensure /Library/LaunchAgents directory exists
-      file:
-        path: /Library/LaunchAgents
-        state: directory
-        owner: root
-        group: wheel
-        mode: '0755'
-
-    - name: Move the Nudge LaunchAgent plist file to the correct location
-      shell: sudo mv /tmp/nudge/com.github.macadmins.Nudge.plist /Library/LaunchAgents/com.github.macadmins.Nudge.plist
-      become: yes
-
-    - name: Set ownership and permissions for the plist file
-      file:
-        path: /Library/LaunchAgents/com.github.macadmins.Nudge.plist
-        owner: root
-        group: wheel
-        mode: '0644'
 
     - name: Download the Nudge pkg installer
       get_url:
@@ -73,6 +35,11 @@
       shell: sudo installer -pkg /tmp/nudge/Nudge-2.0.3.81727.pkg -target /
       args:
         creates: /Applications/Utilities/Nudge.app
+      become: yes
+      
+
+    - name: Move the Nudge LaunchAgent plist file to the correct location
+      shell: sudo mv /tmp/nudge/com.github.macadmins.Nudge.plist /Library/LaunchAgents/com.github.macadmins.Nudge.plist
       become: yes
 
     - name: Load the Nudge LaunchAgent
