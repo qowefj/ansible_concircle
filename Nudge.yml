@@ -4,53 +4,32 @@
   become: yes
 
   tasks:
-    - name: Install required collection
-      ansible.builtin.command:
-        cmd: ansible-galaxy collection install community.general
-
-    - name: Download the Nudge JSON configuration file to /tmp
-      ansible.builtin.get_url:
+    - name: Download the Nudge JSON configuration file
+      get_url:
         url: https://raw.githubusercontent.com/qowefj/ansible_concircle/main/nudge/com.github.macadmins.Nudge.json
-        dest: /tmp/com.github.macadmins.Nudge.json
+        dest: /Library/Preferences/com.github.macadmins.Nudge.json
+        mode: '0644'
+        owner: root
+        group: wheel
 
-    - name: Move the Nudge JSON configuration file to /Library/Preferences
-      ansible.builtin.command:
-        cmd: mv /tmp/com.github.macadmins.Nudge.json /Library/Preferences/com.github.macadmins.Nudge.json
-      become: yes
-
-    - name: Set ownership and permissions for the Nudge JSON configuration file
-      ansible.builtin.command:
-        cmd: chown root:wheel /Library/Preferences/com.github.macadmins.Nudge.json && chmod 0644 /Library/Preferences/com.github.macadmins.Nudge.json
-      become: yes
-
-    - name: Download the Nudge LaunchAgent plist file to /tmp
-      ansible.builtin.get_url:
+    - name: Download the Nudge LaunchAgent plist file
+      get_url:
         url: https://raw.githubusercontent.com/qowefj/ansible_concircle/main/nudge/com.github.macadmins.Nudge.plist
-        dest: /tmp/com.github.macadmins.Nudge.plist
-
-    - name: Move the Nudge LaunchAgent plist file to /Library/LaunchAgents
-      ansible.builtin.command:
-        cmd: mv /tmp/com.github.macadmins.Nudge.plist /Library/LaunchAgents/com.github.macadmins.Nudge.plist
-      become: yes
-
-    - name: Set ownership and permissions for the Nudge LaunchAgent plist file
-      ansible.builtin.command:
-        cmd: chown root:wheel /Library/LaunchAgents/com.github.macadmins.Nudge.plist && chmod 0644 /Library/LaunchAgents/com.github.macadmins.Nudge.plist
-      become: yes
+        dest: /Library/LaunchAgents/com.github.macadmins.Nudge.plist
+        mode: '0644'
+        owner: root
+        group: wheel
 
     - name: Download the Nudge pkg installer
-      ansible.builtin.get_url:
+      get_url:
         url: https://github.com/qowefj/ansible_concircle/raw/main/nudge/Nudge-2.0.3.81727.pkg
         dest: /tmp/Nudge-2.0.3.81727.pkg
 
     - name: Install the Nudge pkg
-      ansible.builtin.command:
-        cmd: installer -pkg /tmp/Nudge-2.0.3.81727.pkg -target /
-      become: yes
+      command: installer -pkg /tmp/Nudge-2.0.3.81727.pkg -target /
 
     - name: Load the Nudge LaunchAgent
-      community.general.launchd:
+      launchd:
         name: com.github.macadmins.Nudge
         state: loaded
         enabled: yes
-      become: yes
