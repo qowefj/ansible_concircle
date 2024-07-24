@@ -26,10 +26,14 @@
         dest: /tmp/Nudge-2.0.3.81727.pkg
 
     - name: Install the Nudge pkg
-      command: installer -pkg /tmp/Nudge-2.0.3.81727.pkg -target /
+      shell: installer -pkg /tmp/Nudge-2.0.3.81727.pkg -target /
+      args:
+        creates: /Applications/Utilities/Nudge.app
 
     - name: Load the Nudge LaunchAgent
-      launchd:
-        name: com.github.macadmins.Nudge
-        state: loaded
-        enabled: yes
+      shell: launchctl load /Library/LaunchAgents/com.github.macadmins.Nudge.plist
+      args:
+        creates: /Library/LaunchAgents/com.github.macadmins.Nudge.plist
+
+    - name: Start the Nudge application
+      shell: /Applications/Utilities/Nudge.app/Contents/MacOS/Nudge
