@@ -3,11 +3,9 @@
   hosts: all
   become: yes
 
-
   tasks:
-    - name: Install required collection
-      ansible.builtin.command:
-        cmd: ansible-galaxy collection install community.general
+    - name: Gather facts
+      ansible.builtin.setup:
 
     - name: Download the Nudge JSON configuration file
       ansible.builtin.get_url:
