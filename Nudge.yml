@@ -1,7 +1,7 @@
 ---
 - name: Deploy Nudge and configure for macOS updates
   hosts: all
-  become: yes
+  sudo: yes
 
   tasks:
     - name: Create a temporary directory for downloads
@@ -58,7 +58,7 @@
         group: wheel
         mode: '0644'
         remote_src: yes
-      become: yes
+      sudo: yes
 
     - name: Download the Nudge pkg installer
       get_url:
