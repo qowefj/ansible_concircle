@@ -26,6 +26,7 @@
 
     - name: Move the Nudge JSON configuration file to the correct location
       command: mv /tmp/nudge/com.github.macadmins.Nudge.json /Library/Preferences/com.github.macadmins.Nudge.json
+      become: yes
       args:
         creates: /Library/Preferences/com.github.macadmins.Nudge.json
 
@@ -52,6 +53,7 @@
 
     - name: Move the Nudge LaunchAgent plist file to the correct location
       command: mv /tmp/nudge/com.github.macadmins.Nudge.plist /Library/LaunchAgents/com.github.macadmins.Nudge.plist
+      become: yes
       args:
         creates: /Library/LaunchAgents/com.github.macadmins.Nudge.plist
 
@@ -74,8 +76,10 @@
 
     - name: Load the Nudge LaunchAgent
       shell: launchctl load /Library/LaunchAgents/com.github.macadmins.Nudge.plist
+      become: yes
       args:
         creates: /Library/LaunchAgents/com.github.macadmins.Nudge.plist
 
     - name: Start the Nudge application
       shell: /Applications/Utilities/Nudge.app/Contents/MacOS/Nudge
+      become: yes
