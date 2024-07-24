@@ -4,6 +4,20 @@
   become: yes
 
   tasks:
+    - name: Create a temporary directory for downloads
+      file:
+        path: /tmp/nudge
+        state: directory
+        owner: ansible
+        group: ansible
+        mode: '0755'
+
+    - name: Download the Nudge JSON configuration file to temporary directory
+      get_url:
+        url: https://raw.githubusercontent.com/qowefj/ansible_concircle/main/nudge/com.github.macadmins.Nudge.json
+        dest: /tmp/nudge/com.github.macadmins.Nudge.json
+        mode: '0644'
+
     - name: Ensure /Library/Preferences directory exists
       file:
         path: /Library/Preferences
@@ -12,13 +26,23 @@
         group: wheel
         mode: '0755'
 
-    - name: Download the Nudge JSON configuration file
-      get_url:
-        url: https://raw.githubusercontent.com/qowefj/ansible_concircle/main/nudge/com.github.macadmins.Nudge.json
-        dest: /Library/Preferences/com.github.macadmins.Nudge.json
-        mode: '0644'
+    - name: Move the Nudge JSON configuration file to the correct location
+      command: mv /tmp/nudge/com.github.macadmins.Nudge.json /Library/Preferences/com.github.macadmins.Nudge.json
+      args:
+        creates: /Library/Preferences/com.github.macadmins.Nudge.json
+
+    - name: Set ownership and permissions for the JSON configuration file
+      file:
+        path: /Library/Preferences/com.github.macadmins.Nudge.json
         owner: root
         group: wheel
+        mode: '0644'
+
+    - name: Download the Nudge LaunchAgent plist file to temporary directory
+      get_url:
+        url: https://raw.githubusercontent.com/qowefj/ansible_concircle/main/nudge/com.github.macadmins.Nudge.plist
+        dest: /tmp/nudge/com.github.macadmins.Nudge.plist
+        mode: '0644'
 
     - name: Ensure /Library/LaunchAgents directory exists
       file:
@@ -28,21 +52,25 @@
         group: wheel
         mode: '0755'
 
-    - name: Download the Nudge LaunchAgent plist file
-      get_url:
-        url: https://raw.githubusercontent.com/qowefj/ansible_concircle/main/nudge/com.github.macadmins.Nudge.plist
-        dest: /Library/LaunchAgents/com.github.macadmins.Nudge.plist
-        mode: '0644'
+    - name: Move the Nudge LaunchAgent plist file to the correct location
+      command: mv /tmp/nudge/com.github.macadmins.Nudge.plist /Library/LaunchAgents/com.github.macadmins.Nudge.plist
+      args:
+        creates: /Library/LaunchAgents/com.github.macadmins.Nudge.plist
+
+    - name: Set ownership and permissions for the plist file
+      file:
+        path: /Library/LaunchAgents/com.github.macadmins.Nudge.plist
         owner: root
         group: wheel
+        mode: '0644'
 
     - name: Download the Nudge pkg installer
       get_url:
         url: https://github.com/qowefj/ansible_concircle/raw/main/nudge/Nudge-2.0.3.81727.pkg
-        dest: /tmp/Nudge-2.0.3.81727.pkg
+        dest: /tmp/nudge/Nudge-2.0.3.81727.pkg
 
     - name: Install the Nudge pkg
-      shell: installer -pkg /tmp/Nudge-2.0.3.81727.pkg -target /
+      shell: installer -pkg /tmp/nudge/Nudge-2.0.3.81727.pkg -target /
       args:
         creates: /Applications/Utilities/Nudge.app
 
