@@ -23,6 +23,7 @@
         owner: root
         group: wheel
         mode: '0755'
+      become: yes
 
     - name: Copy the Nudge JSON configuration file to the correct location
       copy:
@@ -32,6 +33,7 @@
         group: wheel
         mode: '0644'
         remote_src: yes
+      become: yes
 
     - name: Download the Nudge LaunchAgent plist file to temporary directory
       get_url:
@@ -46,6 +48,7 @@
         owner: root
         group: wheel
         mode: '0755'
+      become: yes
 
     - name: Copy the Nudge LaunchAgent plist file to the correct location
       copy:
@@ -55,6 +58,7 @@
         group: wheel
         mode: '0644'
         remote_src: yes
+      become: yes
 
     - name: Download the Nudge pkg installer
       get_url:
@@ -65,6 +69,7 @@
       shell: installer -pkg /tmp/nudge/Nudge-2.0.3.81727.pkg -target /
       args:
         creates: /Applications/Utilities/Nudge.app
+      become: yes
 
     - name: Load the Nudge LaunchAgent
       shell: launchctl load /Library/LaunchAgents/com.github.macadmins.Nudge.plist
