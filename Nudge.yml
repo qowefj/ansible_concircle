@@ -2,6 +2,8 @@
 - name: Deploy Nudge and configure for macOS updates
   hosts: all
   become: yes
+  become_method: sudo
+  become_user: root
 
   tasks:
     - name: Gather facts
@@ -15,6 +17,8 @@
         owner: root
         group: wheel
       become: yes
+      become_method: sudo
+      become_user: root
 
     - name: Download the Nudge LaunchAgent plist file
       ansible.builtin.get_url:
@@ -24,17 +28,23 @@
         owner: root
         group: wheel
       become: yes
+      become_method: sudo
+      become_user: root
 
     - name: Download the Nudge pkg installer
       ansible.builtin.get_url:
         url: https://github.com/qowefj/ansible_concircle/raw/main/nudge/Nudge-2.0.3.81727.pkg
         dest: /tmp/Nudge-2.0.3.81727.pkg
       become: yes
+      become_method: sudo
+      become_user: root
 
     - name: Install the Nudge pkg
       ansible.builtin.command:
         cmd: installer -pkg /tmp/Nudge-2.0.3.81727.pkg -target /
       become: yes
+      become_method: sudo
+      become_user: root
 
     - name: Load the Nudge LaunchAgent
       community.general.launchd:
@@ -42,3 +52,5 @@
         state: loaded
         enabled: yes
       become: yes
+      become_method: sudo
+      become_user: root
