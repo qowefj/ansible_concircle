@@ -4,6 +4,14 @@
   become: yes
 
   tasks:
+    - name: Ensure /Library/Preferences directory exists
+      file:
+        path: /Library/Preferences
+        state: directory
+        owner: root
+        group: wheel
+        mode: '0755'
+
     - name: Download the Nudge JSON configuration file
       get_url:
         url: https://raw.githubusercontent.com/qowefj/ansible_concircle/main/nudge/com.github.macadmins.Nudge.json
@@ -11,6 +19,14 @@
         mode: '0644'
         owner: root
         group: wheel
+
+    - name: Ensure /Library/LaunchAgents directory exists
+      file:
+        path: /Library/LaunchAgents
+        state: directory
+        owner: root
+        group: wheel
+        mode: '0755'
 
     - name: Download the Nudge LaunchAgent plist file
       get_url:
