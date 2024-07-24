@@ -27,7 +27,7 @@
         mode: '0755'
 
     - name: Move the Nudge JSON configuration file to the correct location
-      command: mv /tmp/nudge/com.github.macadmins.Nudge.json /Library/Preferences/com.github.macadmins.Nudge.json
+      shell: sudo mv /tmp/nudge/com.github.macadmins.Nudge.json /Library/Preferences/com.github.macadmins.Nudge.json
       become: yes
 
     - name: Set ownership and permissions for the JSON configuration file
@@ -53,7 +53,7 @@
         mode: '0755'
 
     - name: Move the Nudge LaunchAgent plist file to the correct location
-      command: mv /tmp/nudge/com.github.macadmins.Nudge.plist /Library/LaunchAgents/com.github.macadmins.Nudge.plist
+      shell: sudo mv /tmp/nudge/com.github.macadmins.Nudge.plist /Library/LaunchAgents/com.github.macadmins.Nudge.plist
       become: yes
 
     - name: Set ownership and permissions for the plist file
@@ -70,16 +70,17 @@
       become: no
 
     - name: Install the Nudge pkg
-      shell: installer -pkg /tmp/nudge/Nudge-2.0.3.81727.pkg -target /
+      shell: sudo installer -pkg /tmp/nudge/Nudge-2.0.3.81727.pkg -target /
       args:
         creates: /Applications/Utilities/Nudge.app
+      become: yes
 
     - name: Load the Nudge LaunchAgent
-      shell: launchctl load /Library/LaunchAgents/com.github.macadmins.Nudge.plist
+      shell: sudo launchctl load /Library/LaunchAgents/com.github.macadmins.Nudge.plist
       become: yes
       args:
         creates: /Library/LaunchAgents/com.github.macadmins.Nudge.plist
 
     - name: Start the Nudge application
-      shell: /Applications/Utilities/Nudge.app/Contents/MacOS/Nudge
+      shell: sudo /Applications/Utilities/Nudge.app/Contents/MacOS/Nudge
       become: yes
