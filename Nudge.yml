@@ -8,8 +8,8 @@
       file:
         path: /tmp/nudge
         state: directory
-        owner: ansible
-        group: ansible
+        owner: root
+        group: wheel
         mode: '0755'
 
     - name: Download the Nudge JSON configuration file to temporary directory
