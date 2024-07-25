@@ -43,7 +43,7 @@
         "gracePeriodPath": "/private/var/db/.AppleSetupDone",
         "imminentRefreshCycle": 300,
         "imminentWindowTime": 48,
-        "initialRefreshCycle": 86400,
+        "initialRefreshCycle": 10,
         "launchAgentIdentifier": "com.github.macadmins.Nudge",
         "loadLaunchAgent": false,
         "maxRandomDelayInSeconds": 1200,
