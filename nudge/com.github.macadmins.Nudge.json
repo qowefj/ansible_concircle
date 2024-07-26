@@ -29,7 +29,7 @@
         }
     ],
     "userExperience": {
-        "allowGracePeriods": true,
+        "allowGracePeriods": false,
         "allowLaterDeferralButton": true,
         "allowUserQuitDeferrals": true,
         "allowedDeferrals": 20,
@@ -52,14 +52,10 @@
         "randomDelay": true
     },
     "userInterface": {
-        "actionButtonPath": "systempreferences://com.apple.preferences.softwareupdate",
+        "actionButtonPath": "x-apple.systempreferences:com.apple.preferences.softwareupdate",
         "fallbackLanguage": "en",
         "forceFallbackLanguage": true,
         "forceScreenShotIcon": false,
-        "iconDarkPath": "/tmp/nudge/logoDark.png",
-        "iconLightPath": "/tmp/nudge/logoLight.png",
-        "screenShotDarkPath": "/tmp/nudge/screenShotDark.png",
-        "screenShotLightPath": "/tmp/nudge/screenShotLight.png",
         "showDeferralCount": true,
         "simpleMode": false,
         "singleQuitButton": true,
@@ -82,4 +78,6 @@
                 "subHeader": "A friendly reminder from your local IT team",
                 "screenShotAltText": "Click to zoom into screenshot"
             }
+        ]
+    }
 }
