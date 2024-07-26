@@ -29,10 +29,10 @@
         }
     ],
     "userExperience": {
-        "allowGracePeriods": false,
+        "allowGracePeriods": true,
         "allowLaterDeferralButton": true,
         "allowUserQuitDeferrals": true,
-        "allowedDeferrals": 10,
+        "allowedDeferrals": 20,
         "allowedDeferralsUntilForcedSecondaryQuitButton": 5,
         "approachingRefreshCycle": 3600,
         "approachingWindowTime": 168,
@@ -45,7 +45,7 @@
         "imminentWindowTime": 48,
         "initialRefreshCycle": 10,
         "launchAgentIdentifier": "com.github.macadmins.Nudge",
-        "loadLaunchAgent": false,
+        "loadLaunchAgent": true,
         "maxRandomDelayInSeconds": 1200,
         "noTimers": false,
         "nudgeRefreshCycle": 3600,
@@ -62,6 +62,24 @@
         "screenShotLightPath": "/tmp/nudge/screenShotLight.png",
         "showDeferralCount": true,
         "simpleMode": false,
-        "singleQuitButton": false
-    }
+        "singleQuitButton": true,
+        "updateElements": [
+            {
+                "_language": "en",
+                "actionButtonText": "Update Device",
+                "customDeferralButtonText": "Custom",
+                "customDeferralDropdownText": "Postpone",
+                "informationButtonText": "More Info",
+                "mainContentHeader": "Your device will restart during this update",
+                "mainContentNote": "Important Notes",
+                "mainContentSubHeader": "Updates can take around 30 minutes to complete",
+                "mainContentText": "A fully up-to-date device is required to ensure that IT can accurately protect your device.\n\nYou can postpone the update up to 20 times or until 08/30/2024, whichever comes first.  After that, the update will be strictly mandatory.\n\nTo begin the update, simply click on the Update Device button and follow the provided steps.",
+                "mainHeader": "Your device requires a security update",
+                "oneDayDeferralButtonText": "One Day",
+                "oneHourDeferralButtonText": "One Hour",
+                "primaryQuitButtonText": "Later",
+                "secondaryQuitButtonText": "I understand",
+                "subHeader": "A friendly reminder from your local IT team",
+                "screenShotAltText": "Click to zoom into screenshot"
+            }
 }
