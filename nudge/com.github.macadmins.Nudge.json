@@ -23,7 +23,7 @@
             ],
             "actionButtonPath": "x-apple.systempreferences:com.apple.preferences.softwareupdate",
             "majorUpgradeAppPath": "/Applications/Install macOS Sonoma.app",
-            "requiredInstallationDate": "2024-08-30T00:00:00Z",
+            "requiredInstallationDate": "2024-08-01T14:00:00Z",
             "requiredMinimumOSVersion": "14.5",
             "targetedOSVersionsRule": "default"
         }
