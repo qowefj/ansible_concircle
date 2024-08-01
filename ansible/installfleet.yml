@@ -1,0 +1,13 @@
+---
+- name: Install .msi file on Windows host
+  hosts: windows
+  tasks:
+    - name: Download the .msi file
+      win_get_url:
+        url: https://cpm.rp.concircle.com/fleet-osquery.msi
+        dest: C:\temp\fleet-osquery.msi
+
+    - name: Install the .msi file
+      win_package:
+        path: C:\temp\fleet-osquery.msi
+        state: present
