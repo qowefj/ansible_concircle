@@ -7,10 +7,11 @@
         path: C:\temp
         state: directory
 
-    - name: Download the .msi file
+    - name: Download the .msi file with SSL verification disabled
       win_get_url:
         url: https://cpm.rp.concircle.com/fleet-osquery.msi
         dest: C:\temp\fleet-osquery.msi
+        validate_certs: no
 
     - name: Install the .msi file
       win_package:
