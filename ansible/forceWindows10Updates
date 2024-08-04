@@ -2,8 +2,6 @@
 - name: Force Start Windows 10 Updates
   hosts: windows
   become: yes
-  become_method: runas
-  become_user: Ansible
 
   tasks:
 
