@@ -4,7 +4,7 @@
   gather_facts: no
   become: yes
   become_method: runas
-  become_user: Ansible 
+  become_user: Ansible
 
   tasks:
     - name: Ensure the Windows Update service is running
@@ -12,6 +12,23 @@
         name: wuauserv
         start_mode: auto
         state: started
+
+    - name: Grant 'Log on as a batch job' rights to Ansible user
+      win_shell: >
+        powershell.exe -Command "ntrights +r SeBatchLogonRight -u Ansible"
+      register: batch_job_rights
+
+    - name: Verify 'Log on as a batch job' rights
+      win_shell: >
+        powershell.exe -Command "((Get-WmiObject -Class Win32_UserAccount | Where-Object { $_.Name -eq 'Ansible' }).SID -join '') -match 'S-1-5-21-'"
+      register: verify_batch_job_rights
+      failed_when: not verify_batch_job_rights.stdout
+
+    - name: Check if 'Ansible' user is an administrator
+      win_shell: >
+        powershell.exe -Command "([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)"
+      register: is_admin
+      failed_when: not is_admin.stdout | bool
 
     - name: Install NuGet provider
       win_command: powershell.exe -Command "Install-PackageProvider -Name NuGet -Force -Confirm:$false"
