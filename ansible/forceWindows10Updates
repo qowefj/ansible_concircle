@@ -13,5 +13,5 @@
       when: pswindowsupdate_import is succeeded
 
     - name: Download and install updates
-      win_command: powershell.exe -Command "Get-WindowsUpdate -AcceptAll -Install"
+      win_command: powershell.exe -Command "Install-WindowsUpdate -AcceptAll -AutoReboot -MicrosoftUpdate -RecurseCycle 10 -install"
       when: pswindowsupdate_import is succeeded
