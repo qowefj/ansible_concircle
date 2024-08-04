@@ -2,31 +2,26 @@
 - name: Force Start Windows 10 Updates
   hosts: windows
   become: yes
+  become_method: runas
+  become_user: Administrator
 
   tasks:
 
-    - name: Install NuGet provider
-      win_shell: "powershell.exe -Command \"Install-PackageProvider -Name NuGet -Force -Confirm:$false\""
-      args:
-        executable: cmd
-
-    - name: Install PSWindowsUpdate module
-      win_shell: "powershell.exe -Command \"Install-Module -Name PSWindowsUpdate -Force -Confirm:$false\""
-      args:
-        executable: cmd
-
     - name: Import PSWindowsUpdate module
-      win_shell: "powershell.exe -Command \"Import-Module PSWindowsUpdate\""
+      win_shell: |
+        powershell.exe -Command "Start-Process PowerShell -ArgumentList 'Import-Module PSWindowsUpdate' -Verb RunAs"
       args:
         executable: cmd
 
     - name: Force Windows Update to check for updates
-      win_shell: "powershell.exe -Command \"(New-Object -ComObject Microsoft.Update.AutoUpdate).DetectNow()\""
+      win_shell: |
+        powershell.exe -Command "Start-Process PowerShell -ArgumentList '(New-Object -ComObject Microsoft.Update.AutoUpdate).DetectNow()' -Verb RunAs"
       args:
         executable: cmd
 
     - name: Download and install updates
-      win_shell: "powershell.exe -Command \"Get-WindowsUpdate -AcceptAll -Install -AutoReboot\""
+      win_shell: |
+        powershell.exe -Command "Start-Process PowerShell -ArgumentList 'Get-WindowsUpdate -AcceptAll -Install -AutoReboot' -Verb RunAs"
       args:
         executable: cmd
 
