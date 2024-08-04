@@ -3,6 +3,8 @@
   hosts: windows
   gather_facts: no
   become: yes
+  become_method: runas
+  become_user: Ansible
 
   tasks:
 
