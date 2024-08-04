@@ -2,6 +2,7 @@
 - name: Force Start Windows 10 Updates
   hosts: all
   gather_facts: no
+  become: yes
   tasks:
 
     - name: Import PSWindowsUpdate module
