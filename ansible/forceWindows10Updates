@@ -8,22 +8,16 @@
   tasks:
 
     - name: Import PSWindowsUpdate module
-      win_shell: |
-        powershell.exe -Command "Start-Process PowerShell -ArgumentList 'Import-Module PSWindowsUpdate' -Verb RunAs"
-      args:
-        executable: cmd
+      win_command: powershell.exe -Command "Import-Module PSWindowsUpdate"
+      register: pswindowsupdate_import
 
     - name: Force Windows Update to check for updates
-      win_shell: |
-        powershell.exe -Command "Start-Process PowerShell -ArgumentList '(New-Object -ComObject Microsoft.Update.AutoUpdate).DetectNow()' -Verb RunAs"
-      args:
-        executable: cmd
+      win_command: powershell.exe -Command "(New-Object -ComObject Microsoft.Update.AutoUpdate).DetectNow()"
+      when: pswindowsupdate_import is succeeded
 
     - name: Download and install updates
-      win_shell: |
-        powershell.exe -Command "Start-Process PowerShell -ArgumentList 'Get-WindowsUpdate -AcceptAll -Install -AutoReboot' -Verb RunAs"
-      args:
-        executable: cmd
+      win_command: powershell.exe -Command "Get-WindowsUpdate -AcceptAll -Install -AutoReboot"
+      when: pswindowsupdate_import is succeeded
 
     - name: Reboot if updates are installed and pending a restart
       win_reboot:
