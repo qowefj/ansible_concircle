@@ -12,14 +12,5 @@
       when: pswindowsupdate_import is succeeded
 
     - name: Download and install updates
-      win_command: powershell.exe -Command "Get-WindowsUpdate -AcceptAll -Install -AutoReboot"
+      win_command: powershell.exe -Command "Get-WindowsUpdate -AcceptAll -Install"
       when: pswindowsupdate_import is succeeded
-
-    - name: Reboot if updates are installed and pending a restart
-      win_reboot:
-        msg: "Rebooting after Windows updates"
-        pre_reboot_delay: 60
-        post_reboot_delay: 120
-        reboot_timeout: 3600
-        connect_timeout: 600
-        test_command: 'powershell.exe -Command "(Get-WmiObject -Class Win32_ComputerSystem).PartOfDomain"'
