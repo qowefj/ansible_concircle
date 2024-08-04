@@ -1,0 +1,28 @@
+---
+- name: Force Start Windows 10 Updates
+  hosts: windows
+  tasks:
+    - name: Ensure the Windows Update service is running
+      win_service:
+        name: wuauserv
+        start_mode: auto
+        state: started
+
+    - name: Force Windows Update to check for updates
+      win_shell: "powershell.exe -Command \"(New-Object -ComObject Microsoft.Update.AutoUpdate).DetectNow()\""
+      args:
+        executable: cmd
+
+    - name: Download and install updates
+      win_shell: "powershell.exe -Command \"Install-WindowsUpdate -AcceptAll\""
+      args:
+        executable: cmd
+
+    - name: Reboot if updates are installed and pending a restart
+      win_reboot:
+        msg: "Rebooting after Windows updates"
+        pre_reboot_delay: 60
+        post_reboot_delay: 120
+        reboot_timeout: 3600
+        connect_timeout: 600
+        test_command: 'powershell.exe -Command "(Get-WmiObject -Class Win32_ComputerSystem).PartOfDomain"'
