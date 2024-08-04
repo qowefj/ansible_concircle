@@ -8,13 +8,23 @@
         start_mode: auto
         state: started
 
+    - name: Install PSWindowsUpdate module
+      win_shell: "powershell.exe -Command \"Install-Module -Name PSWindowsUpdate -Force -Confirm:$false\""
+      args:
+        executable: cmd
+
+    - name: Import PSWindowsUpdate module
+      win_shell: "powershell.exe -Command \"Import-Module PSWindowsUpdate\""
+      args:
+        executable: cmd
+
     - name: Force Windows Update to check for updates
       win_shell: "powershell.exe -Command \"(New-Object -ComObject Microsoft.Update.AutoUpdate).DetectNow()\""
       args:
         executable: cmd
 
     - name: Download and install updates
-      win_shell: "powershell.exe -Command \"Install-WindowsUpdate -AcceptAll\""
+      win_shell: "powershell.exe -Command \"Get-WindowsUpdate -AcceptAll -Install -AutoReboot\""
       args:
         executable: cmd
 
