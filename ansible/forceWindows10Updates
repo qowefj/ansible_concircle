@@ -1,9 +1,29 @@
 ---
 - name: Force Start Windows 10 Updates
   hosts: windows
+  gather_facts: no
   become: yes
+  become_method: runas
+  become_user: Ansible 
 
   tasks:
+    - name: Ensure the Windows Update service is running
+      win_service:
+        name: wuauserv
+        start_mode: auto
+        state: started
+
+    - name: Install NuGet provider
+      win_command: powershell.exe -Command "Install-PackageProvider -Name NuGet -Force -Confirm:$false"
+      args:
+        creates: "C:\\Program Files\\PackageManagement\\ProviderAssemblies\\nuget"
+      register: nuget_install
+
+    - name: Install PSWindowsUpdate module
+      win_command: powershell.exe -Command "Install-Module -Name PSWindowsUpdate -Force -Confirm:$false"
+      args:
+        creates: "C:\\Program Files\\WindowsPowerShell\\Modules\\PSWindowsUpdate"
+      when: nuget_install is succeeded
 
     - name: Import PSWindowsUpdate module
       win_command: powershell.exe -Command "Import-Module PSWindowsUpdate"
