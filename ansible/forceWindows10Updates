@@ -1,6 +1,6 @@
 ---
 - name: Force Start Windows 10 Updates
-- hosts: all
+  hosts: all
   gather_facts: no
   tasks:
 
