@@ -1,12 +1,14 @@
 ---
 - name: Force Start Windows 10 Updates
   hosts: windows
+  become: yes
+
   tasks:
-    - name: Ensure the Windows Update service is running
-      win_service:
-        name: wuauserv
-        start_mode: auto
-        state: started
+
+    - name: Install NuGet provider
+      win_shell: "powershell.exe -Command \"Install-PackageProvider -Name NuGet -Force -Confirm:$false\""
+      args:
+        executable: cmd
 
     - name: Install PSWindowsUpdate module
       win_shell: "powershell.exe -Command \"Install-Module -Name PSWindowsUpdate -Force -Confirm:$false\""
