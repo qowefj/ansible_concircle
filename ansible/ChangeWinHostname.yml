@@ -22,7 +22,7 @@
               'RD-CONBELMAR': 'CONBELMAR',
               'RD-CONKOBDOM': 'CONKOBDOM'
           } %}
-          {{ host_mapping.get(current_hostname.stdout, 'UNKNOWN') }}
+          {{ host_mapping.get(current_hostname.stdout.strip(), 'UNKNOWN') }}
 
     - name: Check if the hostname needs to be changed
       debug:
@@ -32,4 +32,9 @@
     - name: Change hostname
       win_hostname:
         name: "{{ new_hostname }}"
-      when: new_hostname != 'UNKNOWN' and new_hostname != current_hostname.stdout
+      when: new_hostname != 'UNKNOWN' and new_hostname != current_hostname.stdout.strip()
+
+    - name: Ensure the new hostname is valid before proceeding
+      fail:
+        msg: "The hostname could not be determined from the current hostname {{ current_hostname.stdout }}."
+      when: new_hostname == 'UNKNOWN'
