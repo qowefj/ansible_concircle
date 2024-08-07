@@ -2,18 +2,33 @@
 - name: Install .msi file on Windows host
   hosts: windows
   tasks:
+    - name: Check if Fleet osquery is already installed
+      win_package:
+        name: Fleet osquery
+        state: present
+      register: fleet_osquery_installed
+      ignore_errors: yes
+
     - name: Ensure the C:\temp directory exists
       win_file:
         path: C:\temp
         state: directory
+      when: fleet_osquery_installed.changed == false
+
+    - name: Check if the .msi file already exists
+      win_stat:
+        path: C:\temp\fleet-osquery.msi
+      register: msi_file
 
     - name: Download the .msi file with SSL verification disabled
       win_get_url:
         url: https://cpm.rp.concircle.com/fleet-osquery.msi
         dest: C:\temp\fleet-osquery.msi
         validate_certs: no
+      when: not msi_file.stat.exists
 
     - name: Install the .msi file
       win_package:
         path: C:\temp\fleet-osquery.msi
         state: present
+      when: fleet_osquery_installed.changed == false
