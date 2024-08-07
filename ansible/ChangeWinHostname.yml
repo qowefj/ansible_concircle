@@ -5,14 +5,12 @@
   tasks:
     - name: Get current hostname
       win_shell: |
-        $hostname = (Get-WmiObject Win32_ComputerSystem).Name
-        Write-Output $hostname
+        (Get-WmiObject Win32_ComputerSystem).Name
       register: current_hostname
 
     - name: Analyze current hostname and determine new hostname
       set_fact:
         new_hostname: |
-          {% set host_prefix = 'CON' %}
           {% set host_mapping = {
               'RD-CONGSTFLO-Concircle': 'CONGSTFLO',
               'RD-CONAIGWOL-concircle': 'CONAIGWOL',
@@ -20,9 +18,9 @@
               'RD-CONORIRON': 'CONORIRON',
               'RD-CONSTAMIL-concircle': 'CONSTAMIL',
               'RD-CONSTEDAV': 'CONSTEDAV',
-              'RD-CONMEZGAB-concircle': 'CONMEZGAB'
-              'RD-CONBELMAR': 'CONBELMAR'
-              'RD-CONKOBDOM': 'CONKOBDOM'           
+              'RD-CONMEZGAB-concircle': 'CONMEZGAB',
+              'RD-CONBELMAR': 'CONBELMAR',
+              'RD-CONKOBDOM': 'CONKOBDOM'
           } %}
           {{ host_mapping.get(current_hostname.stdout, 'UNKNOWN') }}
 
@@ -34,6 +32,4 @@
     - name: Change hostname
       win_hostname:
         name: "{{ new_hostname }}"
-      when: new_hostname != 'UNKNOWN'
-      notify:
-        - Reboot if hostname changed
+      when: new_hostname != 'UNKNOWN' and new_hostname != current_hostname.stdout
