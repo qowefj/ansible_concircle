@@ -1,0 +1,37 @@
+---
+- name: Ensure consistent hostnames on Windows hosts
+  hosts: windows
+  gather_facts: no
+  tasks:
+    - name: Get current hostname
+      win_shell: |
+        $hostname = (Get-WmiObject Win32_ComputerSystem).Name
+        Write-Output $hostname
+      register: current_hostname
+
+    - name: Analyze current hostname and determine new hostname
+      set_fact:
+        new_hostname: |
+          {% set host_prefix = 'CON' %}
+          {% set host_mapping = {
+              'RD-CONGSTFLO-Concircle': 'CONGSTFLO',
+              'RD-CONAIGWOL-concircle': 'CONAIGWOL',
+              'RD-CONPESAND': 'CONPESAND',
+              'RD-CONORIRON': 'CONORIRON',
+              'RD-CONSTAMIL-concircle': 'CONSTAMIL',
+              'RD-CONSTEDAV': 'CONSTEDAV',
+              'RD-CONMEZGAB-concircle': 'CONMEZGAB'
+          } %}
+          {{ host_mapping.get(current_hostname.stdout, 'UNKNOWN') }}
+
+    - name: Check if the hostname needs to be changed
+      debug:
+        msg: "Current hostname is {{ current_hostname.stdout }}. New hostname will be {{ new_hostname }}."
+      when: new_hostname != 'UNKNOWN'
+
+    - name: Change hostname
+      win_hostname:
+        name: "{{ new_hostname }}"
+      when: new_hostname != 'UNKNOWN'
+      notify:
+        - Reboot if hostname changed
