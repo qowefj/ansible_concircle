@@ -21,6 +21,8 @@
               'RD-CONSTAMIL-concircle': 'CONSTAMIL',
               'RD-CONSTEDAV': 'CONSTEDAV',
               'RD-CONMEZGAB-concircle': 'CONMEZGAB'
+              'RD-CONBELMAR': 'CONBELMAR'
+              'RD-CONKOBDOM': 'CONKOBDOM'           
           } %}
           {{ host_mapping.get(current_hostname.stdout, 'UNKNOWN') }}
 
