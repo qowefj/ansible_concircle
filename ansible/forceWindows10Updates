@@ -1,19 +1,25 @@
 ---
-- name: Force Start Windows 10 Updates
-  hosts: all
+- name: Configure Windows Update schedule and initiate updates
+  hosts: windows
   gather_facts: no
-  become: yes
   tasks:
+    - name: Set the preferred update time to Saturday 1 PM (CET)
+      win_shell: |
+        $ScheduledInstallDay = 6  # Saturday
+        $ScheduledInstallTime = 13  # 1 PM CET
+        $serviceManager = New-Object -ComObject "Microsoft.Update.ServiceManager"
+        $serviceManager.ClientApplicationID = "My App"
+        $autoUpdate = New-Object -ComObject "Microsoft.Update.AutoUpdate"
+        $settings = $autoUpdate.Settings
+        $settings.ScheduledInstallDay = $ScheduledInstallDay
+        $settings.ScheduledInstallTime = $ScheduledInstallTime
+        $settings.NotificationLevel = 1
+        $settings.Save()
+      args:
+        executable: powershell
 
-    - name: Import PSWindowsUpdate module
-      win_command: powershell.exe -Command "Import-Module PSWindowsUpdate"
-      register: pswindowsupdate_import
-
-    - name: Force Windows Update to check for updates
-      win_command: powershell.exe -Command "(New-Object -ComObject Microsoft.Update.AutoUpdate).DetectNow()"
-      when: pswindowsupdate_import is succeeded
-
-    - name: Download and install updates
-      become: yes
-      win_command: powershell.exe -Command "Install-WindowsUpdate -AcceptAll -AutoReboot -MicrosoftUpdate -RecurseCycle 10 -install"
-      when: pswindowsupdate_import is succeeded
+    - name: Start downloading and installing updates
+      win_shell: |
+        Install-WindowsUpdate -AcceptAll -AutoReboot
+      args:
+        executable: powershell
