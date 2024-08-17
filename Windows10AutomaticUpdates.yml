@@ -1,43 +1,25 @@
 ---
-- name: Manage Windows 10 Updates
+- name: Configure Windows Update schedule and initiate updates
   hosts: windows
+  gather_facts: no
   tasks:
-    - name: Install all critical and security updates and reboot if necessary
-      ansible.windows.win_updates:
-        category_names:
-          - CriticalUpdates
-          - SecurityUpdates
-        reboot: true
-        log_path: C:\ansible_wu.txt
+    - name: Set the preferred update time to Saturday 1 PM (CET)
+      win_shell: |
+        $ScheduledInstallDay = 6  # Saturday
+        $ScheduledInstallTime = 13  # 1 PM CET
+        $serviceManager = New-Object -ComObject "Microsoft.Update.ServiceManager"
+        $serviceManager.ClientApplicationID = "My App"
+        $autoUpdate = New-Object -ComObject "Microsoft.Update.AutoUpdate"
+        $settings = $autoUpdate.Settings
+        $settings.ScheduledInstallDay = $ScheduledInstallDay
+        $settings.ScheduledInstallTime = $ScheduledInstallTime
+        $settings.NotificationLevel = 1
+        $settings.Save()
+      args:
+        executable: powershell
 
-    - name: Verify ScheduledInstallDay
-      win_reg_stat:
-        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
-        name: ScheduledInstallDay
-      register: verify_scheduled_install_day
-
-    - name: Verify ScheduledInstallTime
-      win_reg_stat:
-        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
-        name: ScheduledInstallTime
-      register: verify_scheduled_install_time
-
-    - name: Verify AlwaysAutoRebootAtScheduledTime
-      win_reg_stat:
-        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
-        name: AlwaysAutoRebootAtScheduledTime
-      register: verify_auto_reboot
-
-    - name: Verify RebootWarningTimeout
-      win_reg_stat:
-        path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU
-        name: RebootWarningTimeout
-      register: verify_reboot_warning_timeout
-
-    - name: Display verification results
-      debug:
-        msg:
-          - "ScheduledInstallDay: {{ verify_scheduled_install_day }}"
-          - "ScheduledInstallTime: {{ verify_scheduled_install_time }}"
-          - "AlwaysAutoRebootAtScheduledTime: {{ verify_auto_reboot }}"
-          - "RebootWarningTimeout: {{ verify_reboot_warning_timeout }}"
+    - name: Start downloading and installing updates
+      win_shell: |
+        Install-WindowsUpdate -AcceptAll -AutoReboot
+      args:
+        executable: powershell
