@@ -3,19 +3,17 @@
   hosts: windows
   gather_facts: no
   tasks:
-    - name: Set preferred update time to Saturday 1 PM (CET) using Group Policy
+    - name: Configure Automatic Updates to download and install at 1 PM on Saturdays
       win_shell: |
-        Import-Module UpdateSettings
-        $policy = Get-WindowsUpdatePolicy
-        $policy.ScheduledInstallDay = 6
-        $policy.ScheduledInstallTime = 13
-        $policy.ActiveHoursStart = 13
-        $policy.ActiveHoursEnd = 14
-        Set-WindowsUpdatePolicy -Policy $policy
+        $AutoUpdateSettings = (New-Object -ComObject "Microsoft.Update.AutoUpdate").Settings
+        $AutoUpdateSettings.NotificationLevel = 3  # Notify before download
+        $AutoUpdateSettings.ScheduledInstallDay = 6  # Saturday
+        $AutoUpdateSettings.ScheduledInstallTime = 13  # 1 PM
+        $AutoUpdateSettings.Save()
       args:
         executable: powershell
 
-    - name: Initiate Windows Update scan, download, and install
+    - name: Trigger Windows Update download and installation
       win_shell: |
         Install-WindowsUpdate -AcceptAll -AutoReboot
       args:
