@@ -1,3 +1,9 @@
+---
+- name: Configure Windows Update schedule using Group Policy and install updates
+  hosts: windows
+  gather_facts: no
+  tasks:
+
     - name: Install PSWindowsUpdate module
       win_shell: |
         Install-Module -Name PSWindowsUpdate -Force -SkipPublisherCheck -ErrorAction Stop
