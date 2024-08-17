@@ -1,15 +1,19 @@
 ---
-- name: Configure Windows Update schedule and initiate updates
+- name: Configure Windows Update schedule using Group Policy
   hosts: windows
   gather_facts: no
   tasks:
-    - name: Configure Automatic Updates to download and install at 1 PM on Saturdays
+    - name: Set Automatic Update Schedule using Group Policy
       win_shell: |
-        $AutoUpdateSettings = (New-Object -ComObject "Microsoft.Update.AutoUpdate").Settings
-        $AutoUpdateSettings.NotificationLevel = 3  # Notify before download
-        $AutoUpdateSettings.ScheduledInstallDay = 6  # Saturday
-        $AutoUpdateSettings.ScheduledInstallTime = 13  # 1 PM
-        $AutoUpdateSettings.Save()
+        $AUKey = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
+        if (-not (Test-Path $AUKey)) {
+            New-Item -Path $AUKey -Force
+        }
+        Set-ItemProperty -Path $AUKey -Name "ScheduledInstallDay" -Value 6  # Saturday
+        Set-ItemProperty -Path $AUKey -Name "ScheduledInstallTime" -Value 13  # 1 PM
+
+        # Optional: Set notification level
+        Set-ItemProperty -Path $AUKey -Name "AUOptions" -Value 4  # Auto download and schedule the install
       args:
         executable: powershell
 
