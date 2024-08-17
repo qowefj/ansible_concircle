@@ -1,11 +1,22 @@
----
-- name: Configure Windows Update schedule using Group Policy
-  hosts: windows
-  gather_facts: no
-  tasks:
-    - name: Import PSWindowsUpdate module and run updates
+    - name: Install PSWindowsUpdate module
       win_shell: |
+        Install-Module -Name PSWindowsUpdate -Force -SkipPublisherCheck -ErrorAction Stop
         Import-Module PSWindowsUpdate
+        if (-not (Get-Command Install-WindowsUpdate -ErrorAction SilentlyContinue)) {
+            Write-Error "PSWindowsUpdate module was not installed correctly."
+        }
+      args:
+        executable: powershell
+      register: pswindowsupdate_install
+
+    - name: Debug output if PSWindowsUpdate module installation fails
+      debug:
+        var: pswindowsupdate_install.stderr_lines
+      when: pswindowsupdate_install.failed
+
+    - name: Run Windows Update if the module is installed
+      win_shell: |
         Install-WindowsUpdate -AcceptAll -AutoReboot
       args:
         executable: powershell
+      when: pswindowsupdate_install.changed
