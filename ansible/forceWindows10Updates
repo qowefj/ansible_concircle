@@ -3,22 +3,9 @@
   hosts: windows
   gather_facts: no
   tasks:
-    - name: Set Automatic Update Schedule using Group Policy
+    - name: Import PSWindowsUpdate module and run updates
       win_shell: |
-        $AUKey = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
-        if (-not (Test-Path $AUKey)) {
-            New-Item -Path $AUKey -Force
-        }
-        Set-ItemProperty -Path $AUKey -Name "ScheduledInstallDay" -Value 6  # Saturday
-        Set-ItemProperty -Path $AUKey -Name "ScheduledInstallTime" -Value 13  # 1 PM
-
-        # Optional: Set notification level
-        Set-ItemProperty -Path $AUKey -Name "AUOptions" -Value 4  # Auto download and schedule the install
-      args:
-        executable: powershell
-
-    - name: Trigger Windows Update download and installation
-      win_shell: |
+        Import-Module PSWindowsUpdate
         Install-WindowsUpdate -AcceptAll -AutoReboot
       args:
         executable: powershell
