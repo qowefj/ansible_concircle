@@ -2,8 +2,8 @@
     "optionalFeatures": {
         "acceptableApplicationBundleIDs": [],
         "acceptableAssertionUsage": false,
-        "acceptableCameraUsage": false,
-        "acceptableScreenSharingUsage": false,
+        "acceptableCameraUsage": true,
+        "acceptableScreenSharingUsage": true,
         "aggressiveUserExperience": false,
         "aggressiveUserFullScreenExperience": false,
         "asynchronousSoftwareUpdate": true,
@@ -18,13 +18,12 @@
             "aboutUpdateURLs": [
                 {
                     "_language": "en",
-                    "aboutUpdateURL": "https://support.apple.com/en-us/109035"
+                    "aboutUpdateURL": "https://www.apple.com/macos/macos-sequoia/"
                 }
             ],
             "actionButtonPath": "x-apple.systempreferences:com.apple.preferences.softwareupdate",
-            "majorUpgradeAppPath": "/Applications/Install macOS Sonoma.app",
-            "requiredInstallationDate": "2024-08-01T14:00:00Z",
-            "requiredMinimumOSVersion": "14.5",
+            "requiredInstallationDate": "2024-11-01T14:00:00Z",
+            "requiredMinimumOSVersion": "latest-supported",
             "targetedOSVersionsRule": "default"
         }
     ],
@@ -69,7 +68,7 @@
                 "mainContentHeader": "Your device will restart during this update",
                 "mainContentNote": "Important Notes",
                 "mainContentSubHeader": "Updates can take around 30 minutes to complete",
-                "mainContentText": "A fully up-to-date device is required to ensure that IT can accurately protect your device.\n\nYou can postpone the update up to 20 times or until 08/30/2024, whichever comes first.  After that, the update will be strictly mandatory.\n\nTo begin the update, simply click on the Update Device button and follow the provided steps.",
+                "mainContentText": "A fully up-to-date device is required to ensure that IT can accurately protect your device.\n\nYou can postpone the update up to 20 times or until 10/30/2024, whichever comes first.  \n\nTo begin the update, simply click on the Update Device button and follow the provided steps.",
                 "mainHeader": "Your device requires a security update",
                 "oneDayDeferralButtonText": "One Day",
                 "oneHourDeferralButtonText": "One Hour",
