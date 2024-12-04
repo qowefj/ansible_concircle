@@ -1,0 +1,8 @@
+---
+- name: Update and upgrade packages on all VMs
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
